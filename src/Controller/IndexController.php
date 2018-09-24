@@ -50,7 +50,7 @@ class IndexController extends AbstractController
             ))
             ->getForm();
 
-        return $this->render('index/index.html.twig', [
+        return $this->render('index.html.twig', [
             'form' => $form->createView(),
         ]);
 
@@ -109,7 +109,7 @@ class IndexController extends AbstractController
         $em->flush();
 
         // output link
-        return $this->render('index/test.html.twig', [
+        return $this->render('test.html.twig', [
             'slug' => $link,
         ]);
     }
@@ -126,7 +126,7 @@ class IndexController extends AbstractController
             1 => "That slug is too short.",
         );
 
-        return $this->render('index/error.html.twig', [
+        return $this->render('error.html.twig', [
             'error' => $errors[$error_id],
         ]);
     }
@@ -143,7 +143,7 @@ class IndexController extends AbstractController
         /** @var \App\Entity\Link $link */
         $link = $link_repo->findOneBy(array("slug" => $slug));
 
-        return $this->render('index/test.html.twig', [
+        return $this->render('test.html.twig', [
             'slug' => $link,
         ]);
     }
@@ -197,7 +197,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/api/check/{slug}", name="checkSlug")
+     * @Route("/api/slug/{slug}", name="checkSlug")
      * @param string $slug
      * @return JsonResponse
      */
@@ -231,6 +231,33 @@ class IndexController extends AbstractController
                 "slug" => $slug,
                 "errors" => $errors,
                 "slugAvailable" => (count($link) == 0)
+            ]
+        ]);
+    }
+
+    /**
+     * @Route("/api/valid_url", name="checkUrl")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function isValidUrl(Request $request)
+    {
+        $success = true;
+        $errors = [];
+
+        $url = $request->query->get("url");
+
+        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        if (!preg_match($regex, $url)) {
+            $success = false;
+            $errors[] = "Not a valid URL.";
+        }
+
+        return new JsonResponse([
+            "success" => $success,
+            "data" => [
+                "url" => $url,
+                "errors" => $errors
             ]
         ]);
     }
