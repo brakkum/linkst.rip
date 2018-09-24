@@ -20,9 +20,9 @@ class IndexController extends AbstractController
     {
 
         $link = new Link();
-        $link->setDomain("test");
 
         $form = $this->createFormBuilder($link)
+            ->setAction($this->generateUrl('newLink'))
             ->add("full_url", TextType::class, array(
                 "label" => false,
                 "required" => true,
@@ -49,35 +49,64 @@ class IndexController extends AbstractController
             ))
             ->getForm();
 
-        $form->handleRequest($request);
+        return $this->render('index/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
 
-        $task = $form->getData();
+    }
 
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // check that custom slug doesn't exist
-            $custom_slug = $request->request->get("form")["slug"];
-            if ($custom_slug) {
-                /** @var \App\Repository\LinkRepository $link_repo */
-                $link_repo = $this->getDoctrine()->getRepository(Link::class);
-                /** @var \App\Entity\Link $link */
-                $link = $link_repo->findOneBy(array("slug" => $custom_slug));
-
-                if ($link) {
-                    return $this->redirect("/err=0");
-                }
-            }
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($task);
-            $em->flush();
-
+    /**
+     * @Route("/new", name="newLink")
+     * @param Request $request
+     * @return string
+     */
+    public function newLink(Request $request)
+    {
+        if (!$request->request->get("form")) {
             return $this->redirect("/");
-        } else {
-            return $this->render('index/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
         }
+
+        $full_url = $request->request->get("form")["full_url"];
+        $custom_slug = $request->request->get("form")["slug"];
+
+        $new_link = new Link();
+        // set full_url
+        $new_link->setFullUrl($full_url);
+
+        // set slug
+        $slug = '';
+        if ($custom_slug) {
+            // is custom slug unique?
+            if ($this->slugAlreadyExists($custom_slug)) {
+                return $this->redirect("/err=0");
+            } else {
+                $new_link->setSlug($custom_slug);
+                $slug = $custom_slug;
+            }
+        } else {
+            // generate random slug
+            $random_slug = $this->getRandomSlug();
+            while ($this->slugAlreadyExists($random_slug)) {
+                $random_slug = $this->getRandomSlug();
+            }
+            $new_link->setSlug($random_slug);
+            $slug = $random_slug;
+        }
+        $link = "localhost:8000/" . $slug;
+
+        // set domain and path
+        list($domain, $path) = $this->getDomainAndPath($full_url);
+        $new_link->setDomain($domain);
+        $new_link->setPath($path);
+
+        // save it to database
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($new_link);
+        $em->flush();
+
+        return $this->render('index/test.html.twig', [
+            'slug' => $link,
+        ]);
     }
 
     /**
@@ -114,4 +143,51 @@ class IndexController extends AbstractController
         ]);
     }
 
+    /**
+     * @param string $slug
+     * @return boolean
+     */
+    public function slugAlreadyExists($slug)
+    {
+        /** @var \App\Repository\LinkRepository $link_repo */
+        $link_repo = $this->getDoctrine()->getRepository(Link::class);
+        /** @var \App\Entity\Link[] $link */
+        $link = $link_repo->findBy(array("slug" => $slug));
+
+        return count($link) != 0;
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     */
+    public function getRandomSlug($length = 5)
+    {
+        $seed = str_split('abcdefghijklmnopqrstuvwxyz'
+            .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            .'0123456789_-~.');
+        shuffle($seed);
+        $rand = '';
+        foreach (array_rand($seed, $length) as $k) {
+            $rand .= $seed[$k];
+        }
+        return $rand;
+    }
+
+    /**
+     * @param string $full_url
+     * @return array
+     */
+    public function getDomainAndPath($full_url)
+    {
+        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        preg_match($regex, $full_url,$matches);
+        $domain = $matches[1];
+        $domain = str_replace("www.", "", $domain);
+        $path = $matches[2];
+        if ($path == "") {
+            $path = null;
+        }
+        return array($domain, $path);
+    }
 }
