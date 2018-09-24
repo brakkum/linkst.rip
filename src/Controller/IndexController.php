@@ -203,30 +203,34 @@ class IndexController extends AbstractController
      */
     public function isSlugAvailable($slug)
     {
+        $success = true;
+        $errors = [];
+
         if (strlen($slug) < 5) {
-            return new JsonResponse([
-                "success" => false,
-                "error" => "Slug too short."
-            ]);
+            $success = false;
+            $errors[] = "Slug must be at least 5 characters.";
         }
 
         if (!preg_match("/^[a-zA-Z0-9-._~]{0,100}$/", $slug)) {
-            return new JsonResponse([
-                "success" => false,
-                "error" => "Invalid slug."
-            ]);
+            $success = false;
+            $errors[] = "Invalid slug.";
         }
 
-        /** @var \App\Repository\LinkRepository $link_repo */
-        $link_repo = $this->getDoctrine()->getRepository(Link::class);
-        /** @var \App\Entity\Link[] $link */
-        $link = $link_repo->findBy(array("slug" => $slug));
+        if ($success) {
+            /** @var \App\Repository\LinkRepository $link_repo */
+            $link_repo = $this->getDoctrine()->getRepository(Link::class);
+            /** @var \App\Entity\Link[] $link */
+            $link = $link_repo->findBy(array("slug" => $slug));
+        } else {
+            $link = 1;
+        }
 
         return new JsonResponse([
-            "success" => true,
+            "success" => $success,
             "data" => [
                 "slug" => $slug,
-                "available" => (count($link) == 0)
+                "errors" => $errors,
+                "slugAvailable" => (count($link) == 0)
             ]
         ]);
     }
