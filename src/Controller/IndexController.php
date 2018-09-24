@@ -69,12 +69,15 @@ class IndexController extends AbstractController
         $full_url = $request->request->get("form")["full_url"];
         $custom_slug = $request->request->get("form")["slug"];
 
+        if (count($custom_slug) < 5) {
+            return $this->redirect("/err=1");
+        }
+
         $new_link = new Link();
         // set full_url
         $new_link->setFullUrl($full_url);
 
         // set slug
-        $slug = '';
         if ($custom_slug) {
             // is custom slug unique?
             if ($this->slugAlreadyExists($custom_slug)) {
@@ -92,7 +95,7 @@ class IndexController extends AbstractController
             $new_link->setSlug($random_slug);
             $slug = $random_slug;
         }
-        $link = "localhost:8000/" . $slug;
+        $link = $request->getHttpHost() . "/" . $slug;
 
         // set domain and path
         list($domain, $path) = $this->getDomainAndPath($full_url);
@@ -104,6 +107,7 @@ class IndexController extends AbstractController
         $em->persist($new_link);
         $em->flush();
 
+        // output link
         return $this->render('index/test.html.twig', [
             'slug' => $link,
         ]);
@@ -118,7 +122,7 @@ class IndexController extends AbstractController
     {
         $errors = array(
             0 => "Hmm.. Looks like that slug is already taken.",
-            1 => "one",
+            1 => "That slug is too short.",
         );
 
         return $this->render('index/error.html.twig', [
