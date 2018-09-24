@@ -197,7 +197,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/api/check/{slug}", name="checkSlug", requirements={"slug"="[a-zA-Z0-9-._~]{0,100}"})
+     * @Route("/api/check/{slug}", name="checkSlug")
      * @param string $slug
      * @return JsonResponse
      */
@@ -207,6 +207,13 @@ class IndexController extends AbstractController
             return new JsonResponse([
                 "success" => false,
                 "error" => "Slug too short."
+            ]);
+        }
+
+        if (!preg_match("/^[a-zA-Z0-9-._~]{0,100}$/", $slug)) {
+            return new JsonResponse([
+                "success" => false,
+                "error" => "Invalid slug."
             ]);
         }
 
