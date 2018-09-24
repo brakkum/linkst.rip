@@ -6,6 +6,10 @@
 parameters:
     locale: 'en'
 
+framework:
+    translator:
+        enabled: false
+
 services:
     # default configuration for services in *this* file
     _defaults:

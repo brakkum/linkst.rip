@@ -6,6 +6,7 @@ use App\Entity\Link;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,7 +43,7 @@ class IndexController extends AbstractController
                 ),
             ))
             ->add("save", SubmitType::class, array(
-                "label" => "Make Link",
+                "label" => "New Link",
                 "attr" => array(
                     "class" => "",
                 )
@@ -69,7 +70,7 @@ class IndexController extends AbstractController
         $full_url = $request->request->get("form")["full_url"];
         $custom_slug = $request->request->get("form")["slug"];
 
-        if (count($custom_slug) < 5) {
+        if (strlen($custom_slug) < 5) {
             return $this->redirect("/err=1");
         }
 
@@ -193,5 +194,33 @@ class IndexController extends AbstractController
             $path = null;
         }
         return array($domain, $path);
+    }
+
+    /**
+     * @Route("/api/check/{slug}", name="checkSlug", requirements={"slug"="[a-zA-Z0-9-._~]{0,100}"})
+     * @param string $slug
+     * @return JsonResponse
+     */
+    public function isSlugAvailable($slug)
+    {
+        if (strlen($slug) < 5) {
+            return new JsonResponse([
+                "success" => false,
+                "error" => "Slug too short."
+            ]);
+        }
+
+        /** @var \App\Repository\LinkRepository $link_repo */
+        $link_repo = $this->getDoctrine()->getRepository(Link::class);
+        /** @var \App\Entity\Link[] $link */
+        $link = $link_repo->findBy(array("slug" => $slug));
+
+        return new JsonResponse([
+            "success" => true,
+            "data" => [
+                "slug" => $slug,
+                "available" => (count($link) == 0)
+            ]
+        ]);
     }
 }
