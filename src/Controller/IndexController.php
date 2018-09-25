@@ -250,14 +250,14 @@ class IndexController extends AbstractController
             $link_repo = $this->getDoctrine()->getRepository(Link::class);
             /** @var \App\Entity\Link[] $link */
             $link = $link_repo->findBy(array("slug" => $slug));
+
+            // if slug already exists
+            if (count($link) > 0) {
+                $errors[] = "Slug already in use.";
+            }
         // otherwise, make it so slugAvailable fails
         } else {
-            $link = 1;
-        }
-
-        // if slug already exists
-        if (count($link) > 0) {
-            $errors[] = "Slug already in use.";
+            $link = ["darn."];
         }
 
         return new JsonResponse([
