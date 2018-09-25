@@ -15,45 +15,12 @@ class IndexController extends AbstractController
 {
     /**
      * @Route("/", name="index")
-     * @param Request $request
      * @return string
      */
-    public function index(Request $request)
+    public function index()
     {
 
-        $link = new Link();
-
-        $form = $this->createFormBuilder($link, array(
-            "attr" => array(
-                "id" => "link_form",
-            )))
-            ->setAction($this->generateUrl('newLink'))
-            ->add("full_url", TextType::class, array(
-                "label" => false,
-                "required" => true,
-                "attr" => array(
-                    "class" => "",
-                    "maxlength" => "255",
-                    "placeholder" => "URL",
-                ),
-            ))
-            ->add("slug", TextType::class, array(
-                "label" => false,
-                "required" => false,
-                "attr" => array(
-                    "class" => "data-valid",
-                    "maxlength" => "100",
-                    "placeholder" => "Custom Slug (optional)",
-                ),
-            ))
-            ->add("save", SubmitType::class, array(
-                "label" => "New Link",
-                "attr" => array(
-                    "class" => "",
-                    "disabled" => true,
-                )
-            ))
-            ->getForm();
+        $form = $this->getIndexForm();
 
         return $this->render('index.html.twig', [
             'form' => $form->createView(),
@@ -147,8 +114,11 @@ class IndexController extends AbstractController
             1 => "That slug is too short.",
         );
 
+        $form = $this->getIndexForm();
+
         return $this->render('error.html.twig', [
-            'error' => $errors[$error_id],
+            "error" => $errors[$error_id],
+            "form" => $form->createView(),
         ]);
     }
 
@@ -250,14 +220,14 @@ class IndexController extends AbstractController
             $link_repo = $this->getDoctrine()->getRepository(Link::class);
             /** @var \App\Entity\Link[] $link */
             $link = $link_repo->findBy(array("slug" => $slug));
+
+            // if slug already exists
+            if (count($link) > 0) {
+                $errors[] = "Slug already in use.";
+            }
         // otherwise, make it so slugAvailable fails
         } else {
-            $link = 1;
-        }
-
-        // if slug already exists
-        if (count($link) > 0) {
-            $errors[] = "Slug already in use.";
+            $link = ["darn."];
         }
 
         return new JsonResponse([
@@ -295,5 +265,42 @@ class IndexController extends AbstractController
                 "errors" => $errors
             ]
         ]);
+    }
+
+    public function getIndexForm()
+    {
+        $link = new Link();
+
+        return $this->createFormBuilder($link, array(
+            "attr" => array(
+                "id" => "link_form",
+            )))
+            ->setAction($this->generateUrl('newLink'))
+            ->add("full_url", TextType::class, array(
+                "label" => false,
+                "required" => true,
+                "attr" => array(
+                    "class" => "",
+                    "maxlength" => "255",
+                    "placeholder" => "URL",
+                ),
+            ))
+            ->add("slug", TextType::class, array(
+                "label" => false,
+                "required" => false,
+                "attr" => array(
+                    "class" => "data-valid",
+                    "maxlength" => "100",
+                    "placeholder" => "Custom Slug (optional)",
+                ),
+            ))
+            ->add("save", SubmitType::class, array(
+                "label" => "New Link",
+                "attr" => array(
+                    "class" => "",
+                    "disabled" => true,
+                )
+            ))
+            ->getForm();
     }
 }

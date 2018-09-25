@@ -1,13 +1,35 @@
 
 $("#form_full_url").on("input paste", function() {
     let url = $(this).val();
-    fetchUrlInfo(url);
+    doDelayedUrlSearch(url);
 });
 
 $("#form_slug").on("input paste", function() {
     let slug = $(this).val();
-    fetchSlugInfo(slug);
+    doDelayedSlugSearch(slug);
 });
+
+let urlTimeout = null;
+
+function doDelayedUrlSearch(url) {
+    if (urlTimeout) {
+        clearTimeout(urlTimeout);
+    }
+    urlTimeout = setTimeout(function() {
+        fetchUrlInfo(url);
+    }, 1000);
+}
+
+let slugTimeout = null;
+
+function doDelayedSlugSearch(slug) {
+    if (slugTimeout) {
+        clearTimeout(slugTimeout);
+    }
+    slugTimeout = setTimeout(function() {
+        fetchSlugInfo(slug);
+    }, 1000);
+}
 
 fetchUrlInfo = url => {
     let url_input = document.getElementById("form_full_url");
