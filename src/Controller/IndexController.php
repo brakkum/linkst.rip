@@ -44,6 +44,9 @@ class IndexController extends AbstractController
         $new_link = new Link();
 
         // set domain and path
+        if (!$this->matchesDomainRegex($full_url)) {
+            return $this->redirect("/err=2");
+        }
         list($domain, $path) = $this->getDomainAndPath($full_url);
         $new_link->setDomain($domain);
         $new_link->setPath($path);
@@ -102,7 +105,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/err={error_id}", name="errorDisplay", requirements={"error_id"="[0-1]"})
+     * @Route("/err={error_id}", name="errorDisplay", requirements={"error_id"="[0-2]"})
      * @param int $error_id
      * @return string
      */
@@ -111,13 +114,11 @@ class IndexController extends AbstractController
         $errors = array(
             0 => "Hmm.. Looks like that slug is already taken.",
             1 => "That slug is too short.",
+            2 => "Invalid URL.",
         );
 
-        $form = $this->getIndexForm();
-
-        return $this->render("index.html.twig", [
+        return $this->render("error.html.twig", [
             "error" => $errors[$error_id],
-            "form" => $form->createView(),
         ]);
     }
 
@@ -140,6 +141,12 @@ class IndexController extends AbstractController
 
         // Handle redirect. This is what it's all for.
         return new RedirectResponse("http://" . $link->getFullUrl());
+    }
+
+    public function matchesDomainRegex($url)
+    {
+        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        return (preg_match($regex, $url));
     }
 
     /**

@@ -40,6 +40,7 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    border-radius: 4px;
 }
 
 button:hover {
@@ -49,4 +50,29 @@ button:hover {
 
 button.data-valid {
     background-color: #6edc6e;
+}
+
+#errors {
+    margin: 20px;
+    color: darkred;
+    text-align: right;
+}
+
+.errors-page {
+    font-size: 40px;
+    text-align: center;
+    width: 90%;
+    margin: auto;
+}
+
+.go-back {
+    margin-top: 20px;
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+.go-back a {
+    color: #5eb5e0;
+    text-decoration: none;
 }

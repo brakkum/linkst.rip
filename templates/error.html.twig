@@ -3,5 +3,12 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{ error }}
+    <div class="errors-page">
+        {{ error }}
+    </div>
+    <div class="go-back">
+        <a href="/">
+            Try again.
+        </a>
+    </div>
 {% endblock %}
