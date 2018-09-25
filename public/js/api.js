@@ -99,8 +99,10 @@ updateSaveButton = () => {
     if (url.classList.contains("data-valid") &&
             slug.classList.contains("data-valid")) {
         button.disabled = false;
+        button.classList.add("data-valid");
     } else {
         button.disabled = true;
+        button.classList.remove("data-valid");
     }
 };
 
