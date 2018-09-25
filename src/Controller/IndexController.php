@@ -23,9 +23,8 @@ class IndexController extends AbstractController
         $form = $this->getIndexForm();
 
         return $this->render('index.html.twig', [
-            'form' => $form->createView(),
+            "form" => $form->createView(),
         ]);
-
     }
 
     /**
@@ -116,7 +115,7 @@ class IndexController extends AbstractController
 
         $form = $this->getIndexForm();
 
-        return $this->render('error.html.twig', [
+        return $this->render("index.html.twig", [
             "error" => $errors[$error_id],
             "form" => $form->createView(),
         ]);
