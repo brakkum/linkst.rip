@@ -28,7 +28,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="newLink")
+     * @Route("/link", name="newLink")
      * @param Request $request
      * @return string
      */
@@ -79,8 +79,8 @@ class IndexController extends AbstractController
 
             // output pre-existing entry if match
             if ($link) {
-                return $this->render('test.html.twig', [
-                    'slug' => $link[0],
+                return $this->render('output.html.twig', [
+                    'link' => $link[0],
                 ]);
             }
 
@@ -93,14 +93,16 @@ class IndexController extends AbstractController
             $slug = $random_slug;
         }
 
+        $new_link->generateLink($request->getHttpHost());
+
         // save it to database
         $em = $this->getDoctrine()->getManager();
         $em->persist($new_link);
         $em->flush();
 
-        // output link
-        return $this->render('test.html.twig', [
-            'slug' => $request->getHttpHost() . "/" . $slug,
+        // output
+        return $this->render('output.html.twig', [
+            'link' => $new_link,
         ]);
     }
 

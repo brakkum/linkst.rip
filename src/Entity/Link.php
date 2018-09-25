@@ -36,6 +36,11 @@ class Link
      */
     private $full_url;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $link;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,25 @@ class Link
     public function setFullUrl(string $full_url): self
     {
         $this->full_url = $full_url;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(string $link): self
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    public function generateLink($host)
+    {
+        $this->link = $host . "/" . $this->getSlug();
 
         return $this;
     }
