@@ -5,7 +5,7 @@ $("#form_full_url").on("input", function() {
 });
 
 fetchUrlInfo = url => {
-    let save_button = document.getElementById("form_save");
+    let url_input = document.getElementById("form_full_url");
     let error_div = document.getElementById("errors");
     fetch(`/api/valid_url?url=${url}`)
         .then(response => response.json())
@@ -16,26 +16,58 @@ fetchUrlInfo = url => {
             } else {
                 error_div.innerHTML = "";
             }
+
+            if (data.success) {
+                if (!url_input.classList.contains("data-valid")) {
+                    url_input.classList.add("data-valid");
+                }
+            } else {
+                if (url_input.classList.contains("data-valid")) {
+                    url_input.classList.remove("data-valid");
+                }
+            }
         })
+};
+
+fetchSlugInfo = slug => {
+    let slug_input = document.getElementById("form_slug");
+    let error_div = document.getElementById("errors");
+
+    if (slug) {
+        fetch(`/api/slug/${slug}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.data.errors.length > 0) {
+                    error_div.innerHTML = data.data.errors[0];
+                } else {
+                    error_div.innerHTML = "";
+                }
+
+                if (data.success) {
+                    if (!slug_input.classList.contains("data-valid")) {
+                        slug_input.classList.add("data-valid");
+                    }
+                } else {
+                    if (slug_input.classList.contains("data-valid")) {
+                        slug_input.classList.remove("data-valid");
+                    }
+                }
+            })
+    } else {
+        error_div.innerHTML = "";
+        if (!slug_input.classList.contains("data-valid")) {
+            slug_input.classList.add("data-valid");
+        }
+    }
 };
 
 $("#form_slug").on("input", function() {
     let slug = $(this).val();
-    if (slug) {
-        $.ajax({
-            url: `/api/slug/${slug}`
-        })
-        .done(function(response) {
-            if (response.success) {
-                $(this).data("valid", true);
-            } else {
-                $(this).data("valid", false);
-            }
-        });
-    } else {
-        $(this).data("valid", true);
-    }
+    fetchSlugInfo(slug);
 });
+
+let save_button = document.getElementById("form_save");
+
 
 // $("#form_save").click(function(e) {
 //     e.preventDefault();
