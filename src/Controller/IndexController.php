@@ -43,7 +43,7 @@ class IndexController extends AbstractController
                 "attr" => array(
                     "class" => "data-valid",
                     "maxlength" => "100",
-                    "placeholder" => "Custom Slug",
+                    "placeholder" => "Custom Slug (optional)",
                 ),
             ))
             ->add("save", SubmitType::class, array(
