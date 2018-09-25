@@ -9,22 +9,24 @@ $("#form_slug").on("input paste", function() {
     doDelayedSlugSearch(slug);
 });
 
-let timeout = null;
+let urlTimeout = null;
 
 function doDelayedUrlSearch(url) {
-    if (timeout) {
-        clearTimeout(timeout);
+    if (urlTimeout) {
+        clearTimeout(urlTimeout);
     }
-    timeout = setTimeout(function() {
+    urlTimeout = setTimeout(function() {
         fetchUrlInfo(url);
     }, 1000);
 }
 
+let slugTimeout = null;
+
 function doDelayedSlugSearch(slug) {
-    if (timeout) {
-        clearTimeout(timeout);
+    if (slugTimeout) {
+        clearTimeout(slugTimeout);
     }
-    timeout = setTimeout(function() {
+    slugTimeout = setTimeout(function() {
         fetchSlugInfo(slug);
     }, 1000);
 }
