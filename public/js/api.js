@@ -59,7 +59,7 @@ fetchSlugInfo = slug => {
                     error_div.innerHTML = "";
                 }
 
-                if (data.success) {
+                if (data.success && data.data.slugAvailable) {
                     if (!slug_input.classList.contains("data-valid")) {
                         slug_input.classList.add("data-valid");
                     }

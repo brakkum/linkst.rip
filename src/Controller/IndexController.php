@@ -97,7 +97,22 @@ class IndexController extends AbstractController
                 $slug = $custom_slug;
             }
         } else {
+            if ($custom_slug === "") {
+                $custom_slug = null;
+            }
+
             // first, check if this exists in database
+            /** @var \App\Repository\LinkRepository $link_repo */
+            $link_repo = $this->getDoctrine()->getRepository(Link::class);
+            /** @var \App\Entity\Link[] $link */
+            $link = $link_repo->findBy(array("domain" => $domain, "path" => $path));
+
+            // output pre-existing entry if match
+            if ($link) {
+                return $this->render('test.html.twig', [
+                    'slug' => $link[0],
+                ]);
+            }
 
             // generate random slug
             $random_slug = $this->getRandomSlug();
@@ -107,7 +122,6 @@ class IndexController extends AbstractController
             $new_link->setSlug($random_slug);
             $slug = $random_slug;
         }
-        $link = $request->getHttpHost() . "/" . $slug;
 
         // save it to database
         $em = $this->getDoctrine()->getManager();
@@ -116,7 +130,7 @@ class IndexController extends AbstractController
 
         // output link
         return $this->render('test.html.twig', [
-            'slug' => $link,
+            'slug' => $request->getHttpHost() . "/" . $slug,
         ]);
     }
 
@@ -148,6 +162,11 @@ class IndexController extends AbstractController
         $link_repo = $this->getDoctrine()->getRepository(Link::class);
         /** @var \App\Entity\Link $link */
         $link = $link_repo->findOneBy(array("slug" => $slug));
+
+        // If not a valid slug, redirect to home
+        if (!$link) {
+            return $this->redirect("/");
+        }
 
         return $this->render('test.html.twig', [
             'slug' => $link,
@@ -213,23 +232,32 @@ class IndexController extends AbstractController
         $success = true;
         $errors = [];
 
+        // check slug length
         if (strlen($slug) < 5) {
             $success = false;
             $errors[] = "Slug must be at least 5 characters.";
         }
 
-        if (!preg_match("/^[a-zA-Z0-9-._~]{0,100}$/", $slug)) {
+        // regex to match potential slug
+        if (!preg_match("/^[a-zA-Z0-9-_~]{0,100}$/", $slug)) {
             $success = false;
             $errors[] = "Invalid slug.";
         }
 
+        // if length and regex check successful
         if ($success) {
             /** @var \App\Repository\LinkRepository $link_repo */
             $link_repo = $this->getDoctrine()->getRepository(Link::class);
             /** @var \App\Entity\Link[] $link */
             $link = $link_repo->findBy(array("slug" => $slug));
+        // otherwise, make it so slugAvailable fails
         } else {
             $link = 1;
+        }
+
+        // if slug already exists
+        if (count($link) > 0) {
+            $errors[] = "Slug already in use.";
         }
 
         return new JsonResponse([
