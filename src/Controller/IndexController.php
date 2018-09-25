@@ -46,6 +46,7 @@ class IndexController extends AbstractController
                 "label" => "New Link",
                 "attr" => array(
                     "class" => "",
+                    "disabled" => true,
                 )
             ))
             ->getForm();

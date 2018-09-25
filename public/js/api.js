@@ -52,7 +52,7 @@ fetchSlugInfo = slug => {
                         slug_input.classList.remove("data-valid");
                     }
                 }
-            })
+            });
     } else {
         error_div.innerHTML = "";
         if (!slug_input.classList.contains("data-valid")) {
