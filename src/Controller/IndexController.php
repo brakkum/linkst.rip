@@ -37,7 +37,7 @@ class IndexController extends AbstractController
                 "label" => false,
                 "required" => false,
                 "attr" => array(
-                    "class" => "",
+                    "class" => "data-valid",
                     "maxlength" => "100",
                     "placeholder" => "Custom Slug",
                 ),

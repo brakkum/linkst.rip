@@ -1,7 +1,12 @@
 
-$("#form_full_url").on("input", function() {
+$("#form_full_url").on("input paste", function() {
     let url = $(this).val();
     fetchUrlInfo(url);
+});
+
+$("#form_slug").on("input paste", function() {
+    let slug = $(this).val();
+    fetchSlugInfo(slug);
 });
 
 fetchUrlInfo = url => {
@@ -10,7 +15,6 @@ fetchUrlInfo = url => {
     fetch(`/api/valid_url?url=${url}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             if (data.data.errors.length > 0) {
                 error_div.innerHTML = data.data.errors[0];
             } else {
@@ -26,7 +30,8 @@ fetchUrlInfo = url => {
                     url_input.classList.remove("data-valid");
                 }
             }
-        })
+        });
+    updateSaveButton();
 };
 
 fetchSlugInfo = slug => {
@@ -59,20 +64,37 @@ fetchSlugInfo = slug => {
             slug_input.classList.add("data-valid");
         }
     }
+    updateSaveButton();
 };
 
-$("#form_slug").on("input", function() {
-    let slug = $(this).val();
-    fetchSlugInfo(slug);
+validateBoth = () => {
+    let url = document.getElementById("form_full_url");
+    let slug = document.getElementById("form_slug");
+    let url_val = url.value;
+    let slug_val = slug.value;
+
+    fetchUrlInfo(url_val);
+    fetchSlugInfo(slug_val);
+};
+
+updateSaveButton = () => {
+    setTimeout(function(){
+        let url = document.getElementById("form_full_url");
+        let slug = document.getElementById("form_slug");
+        let button = document.getElementById("form_save");
+
+        if (url.classList.contains("data-valid") &&
+                slug.classList.contains("data-valid")) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    }, 200);
+};
+
+$("#form_save").on("click", function(e) {
+    e.preventDefault();
+    validateBoth();
+    updateSaveButton();
+    // document.getElementsByName("form").submit();
 });
-
-let save_button = document.getElementById("form_save");
-
-
-// $("#form_save").click(function(e) {
-//     e.preventDefault();
-//
-//     let url = $("#form_full_url");
-//
-//     let slug = $("#form_slug");
-// });
