@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -168,9 +169,8 @@ class IndexController extends AbstractController
             return $this->redirect("/");
         }
 
-        return $this->render('test.html.twig', [
-            'slug' => $link,
-        ]);
+        // Handle redirect. This is what it's all for.
+        return new RedirectResponse("https://" . $link->getFullUrl());
     }
 
     /**
