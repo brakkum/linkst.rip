@@ -12,26 +12,37 @@ $("#form_slug").on("input paste", function() {
 fetchUrlInfo = url => {
     let url_input = document.getElementById("form_full_url");
     let error_div = document.getElementById("errors");
-    fetch(`/api/valid_url?url=${url}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.data.errors.length > 0) {
-                error_div.innerHTML = data.data.errors[0];
-            } else {
-                error_div.innerHTML = "";
-            }
 
-            if (data.success) {
-                if (!url_input.classList.contains("data-valid")) {
-                    url_input.classList.add("data-valid");
+    if (url) {
+        fetch(`/api/valid_url?url=${url}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.data.errors.length > 0) {
+                    error_div.innerHTML = data.data.errors[0];
+                } else {
+                    error_div.innerHTML = "";
                 }
-            } else {
-                if (url_input.classList.contains("data-valid")) {
-                    url_input.classList.remove("data-valid");
+
+                if (data.success) {
+                    if (!url_input.classList.contains("data-valid")) {
+                        url_input.classList.add("data-valid");
+                    }
+                } else {
+                    if (url_input.classList.contains("data-valid")) {
+                        url_input.classList.remove("data-valid");
+                    }
                 }
-            }
-        });
-    updateSaveButton();
+            })
+            .then(() => {
+                updateSaveButton();
+            });
+    } else {
+        error_div.innerHTML = "";
+        if (url_input.classList.contains("data-valid")) {
+            url_input.classList.remove("data-valid");
+        }
+        updateSaveButton();
+    }
 };
 
 fetchSlugInfo = slug => {
@@ -57,14 +68,17 @@ fetchSlugInfo = slug => {
                         slug_input.classList.remove("data-valid");
                     }
                 }
+            })
+            .then(() => {
+                updateSaveButton();
             });
     } else {
         error_div.innerHTML = "";
         if (!slug_input.classList.contains("data-valid")) {
             slug_input.classList.add("data-valid");
         }
+        updateSaveButton();
     }
-    updateSaveButton();
 };
 
 validateBoth = () => {
@@ -78,23 +92,26 @@ validateBoth = () => {
 };
 
 updateSaveButton = () => {
-    setTimeout(function(){
-        let url = document.getElementById("form_full_url");
-        let slug = document.getElementById("form_slug");
-        let button = document.getElementById("form_save");
+    let url = document.getElementById("form_full_url");
+    let slug = document.getElementById("form_slug");
+    let button = document.getElementById("form_save");
 
-        if (url.classList.contains("data-valid") &&
-                slug.classList.contains("data-valid")) {
-            button.disabled = false;
-        } else {
-            button.disabled = true;
-        }
-    }, 200);
+    if (url.classList.contains("data-valid") &&
+            slug.classList.contains("data-valid")) {
+        button.disabled = false;
+    } else {
+        button.disabled = true;
+    }
 };
 
 $("#form_save").on("click", function(e) {
     e.preventDefault();
     validateBoth();
     updateSaveButton();
-    // document.getElementsByName("form").submit();
+    let submit_button = document.getElementById("form_save");
+    let form = document.getElementById("link_form");
+
+    if (submit_button.disabled === false) {
+        form.submit();
+    }
 });

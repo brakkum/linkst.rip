@@ -22,7 +22,10 @@ class IndexController extends AbstractController
 
         $link = new Link();
 
-        $form = $this->createFormBuilder($link)
+        $form = $this->createFormBuilder($link, array(
+            "attr" => array(
+                "id" => "link_form",
+            )))
             ->setAction($this->generateUrl('newLink'))
             ->add("full_url", TextType::class, array(
                 "label" => false,
@@ -71,16 +74,21 @@ class IndexController extends AbstractController
         $full_url = $request->request->get("form")["full_url"];
         $custom_slug = $request->request->get("form")["slug"];
 
-        if (strlen($custom_slug) < 5) {
-            return $this->redirect("/err=1");
-        }
-
         $new_link = new Link();
+
+        // set domain and path
+        list($domain, $path) = $this->getDomainAndPath($full_url);
+        $new_link->setDomain($domain);
+        $new_link->setPath($path);
+
         // set full_url
-        $new_link->setFullUrl($full_url);
+        $new_link->setFullUrl($domain . "/" . $path);
 
         // set slug
         if ($custom_slug) {
+            if (strlen($custom_slug) < 5) {
+                return $this->redirect("/err=1");
+            }
             // is custom slug unique?
             if ($this->slugAlreadyExists($custom_slug)) {
                 return $this->redirect("/err=0");
@@ -89,6 +97,8 @@ class IndexController extends AbstractController
                 $slug = $custom_slug;
             }
         } else {
+            // first, check if this exists in database
+
             // generate random slug
             $random_slug = $this->getRandomSlug();
             while ($this->slugAlreadyExists($random_slug)) {
@@ -98,11 +108,6 @@ class IndexController extends AbstractController
             $slug = $random_slug;
         }
         $link = $request->getHttpHost() . "/" . $slug;
-
-        // set domain and path
-        list($domain, $path) = $this->getDomainAndPath($full_url);
-        $new_link->setDomain($domain);
-        $new_link->setPath($path);
 
         // save it to database
         $em = $this->getDoctrine()->getManager();
@@ -171,7 +176,7 @@ class IndexController extends AbstractController
     {
         $seed = str_split('abcdefghijklmnopqrstuvwxyz'
             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            .'0123456789_-~.');
+            .'0123456789_-~');
         shuffle($seed);
         $rand = '';
         foreach (array_rand($seed, $length) as $k) {
@@ -186,11 +191,12 @@ class IndexController extends AbstractController
      */
     public function getDomainAndPath($full_url)
     {
-        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
-        preg_match($regex, $full_url,$matches);
-        $domain = $matches[1];
-        $domain = str_replace("www.", "", $domain);
-        $path = $matches[2];
+        $full_regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        preg_match($full_regex, $full_url,$full_matches);
+        $domain_regex = "/(https?:\/\/)?(www\.)?(.*)/";
+        preg_match($domain_regex, $full_matches[1], $domain_matches);
+        $domain = $domain_matches[3];
+        $path = $full_matches[2];
         if ($path == "") {
             $path = null;
         }
