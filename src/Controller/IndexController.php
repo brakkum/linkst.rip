@@ -170,7 +170,7 @@ class IndexController extends AbstractController
         }
 
         // Handle redirect. This is what it's all for.
-        return new RedirectResponse("https://" . $link->getFullUrl());
+        return new RedirectResponse("http://" . $link->getFullUrl());
     }
 
     /**
