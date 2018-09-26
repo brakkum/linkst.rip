@@ -10,7 +10,7 @@ $("#form_slug").on("input paste", function() {
 });
 
 let urlTimeout = null;
-const TIMEOUT_LENGTH = 500;
+const TIMEOUT_LENGTH = 400;
 
 function doDelayedUrlSearch(url) {
     if (urlTimeout) {

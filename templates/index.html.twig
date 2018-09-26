@@ -4,14 +4,16 @@
 
 {% block body %}
     {{ parent() }}
-    <div class="form">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
-        <div id="errors">
-            {% if error is defined and error %}
-                {{ error }}
-            {% endif %}
+    <div class="body">
+        <div class="form">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+            <div id="errors">
+                {% if error is defined and error %}
+                    {{ error }}
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

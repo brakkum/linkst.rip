@@ -2,11 +2,13 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <div class="url-output">
-        <div class="url">
-            <input type="text" value="{{ output_link }}" id="link-output" />
-            <button id="link-out-button" class="data-valid">Copy Link</button>
-            <a href="/"><button id="to-index">Make Another</button></a>
+    <div class="body">
+        <div class="url-output">
+            <div class="url">
+                <input type="text" value="{{ output_link }}" id="link-output" />
+                <button id="link-out-button" class="data-valid">Copy Link</button>
+                <a href="/"><button id="to-index">Make Another</button></a>
+            </div>
         </div>
     </div>
 {% endblock %}
