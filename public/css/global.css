@@ -9,7 +9,7 @@
     height: 100px;
 }
 
-.form {
+.form, .url-output {
     width: 80%;
     max-width: 600px;
     margin: auto;
@@ -27,13 +27,14 @@ input {
     box-sizing: border-box;
 }
 
-input:focus {
+input:focus, button:focus {
     outline: none;
 }
 
 button {
     background-color: grey;
     border: none;
+    box-shadow: none;
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -41,15 +42,23 @@ button {
     display: inline-block;
     font-size: 16px;
     border-radius: 4px;
+    transition: all .2s;
+}
+
+button:focus {
+    box-shadow: inset 1px 1px 1px 1px darkslategrey;
 }
 
 button:hover {
-    background-color: #d4dbd4;
     color: white;
 }
 
 button.data-valid {
     background-color: #6edc6e;
+}
+
+button#to-index {
+    background-color: lightblue;
 }
 
 #errors {

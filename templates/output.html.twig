@@ -4,7 +4,13 @@
 {% block body %}
     <div class="url-output">
         <div class="url">
-            {{ dump(link) }}
+            <input type="text" value="{{ link.getLink() }}" id="link-output" />
+            <button id="link-out-button" class="data-valid">Copy Link</button>
+            <a href="/"><button id="to-index">Make Another</button></a>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/copy.js" type="text/javascript"></script>
 {% endblock %}
