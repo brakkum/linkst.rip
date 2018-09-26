@@ -144,7 +144,7 @@ class IndexController extends AbstractController
 
     public function matchesDomainRegex($url)
     {
-        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        $regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
         return (preg_match($regex, $url));
     }
 
@@ -188,7 +188,7 @@ class IndexController extends AbstractController
      */
     public function getDomainAndPath($full_url)
     {
-        $full_regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        $full_regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
         preg_match($full_regex, $full_url,$full_matches);
         $domain_regex = "/(https?:\/\/)?(www\.)?(.*)/";
         preg_match($domain_regex, $full_matches[1], $domain_matches);
@@ -261,7 +261,7 @@ class IndexController extends AbstractController
 
         $url = $request->query->get("url");
 
-        $regex = "/([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        $regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
         if (!preg_match($regex, $url)) {
             $success = false;
             $errors[] = "Not a valid URL.";
