@@ -17,7 +17,7 @@ function doDelayedUrlSearch(url) {
     }
     urlTimeout = setTimeout(function() {
         fetchUrlInfo(url);
-    }, 1000);
+    }, 500);
 }
 
 let slugTimeout = null;
@@ -28,7 +28,7 @@ function doDelayedSlugSearch(slug) {
     }
     slugTimeout = setTimeout(function() {
         fetchSlugInfo(slug);
-    }, 1000);
+    }, 500);
 }
 
 fetchUrlInfo = url => {
