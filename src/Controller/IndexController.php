@@ -90,7 +90,7 @@ class IndexController extends AbstractController
             $new_link->setSlug($random_slug);
         }
 
-        $new_link->generateLink($request->getHttpHost());
+        $new_link->generateLink(getenv("HTTP_HOST"));
 
         // save it to database
         $em = $this->getDoctrine()->getManager();
@@ -139,7 +139,7 @@ class IndexController extends AbstractController
         }
 
         // Handle redirect. This is what it's all for.
-        return new RedirectResponse("http://" . $link->getFullUrl());
+        return new RedirectResponse("http://" . $link->getFullUrl(), getenv("REDIRECT_RESPONSE"));
     }
 
     public function matchesDomainRegex($url)
