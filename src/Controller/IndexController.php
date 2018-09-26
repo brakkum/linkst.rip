@@ -52,7 +52,7 @@ class IndexController extends AbstractController
         $new_link->setPath($path);
 
         // set full_url
-        $new_link->setFullUrl($domain . "/" . $path);
+        $new_link->setFullUrl($domain . $path);
 
         // set slug
         if ($custom_slug) {
