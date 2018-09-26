@@ -42,7 +42,7 @@ class IndexController extends AbstractController
 
         $new_link = new Link();
 
-        // set domain and path
+        // double check that the url is 'valid'
         if (!$this->matchesDomainRegex($url)) {
             return $this->redirect("/err=2");
         }
@@ -135,13 +135,19 @@ class IndexController extends AbstractController
             return $this->redirect("/");
         }
 
+        $url = $link->getUrl();
+
+        if (!preg_match("/https?:\/\//", $url)) {
+            $url = "http://" . $url;
+        }
+
         // Handle redirect. This is what it's all for.
-        return new RedirectResponse("http://" . $link->getUrl(), getenv("REDIRECT_RESPONSE"));
+        return new RedirectResponse($url, getenv("REDIRECT_RESPONSE"));
     }
 
     public function matchesDomainRegex($url)
     {
-        $regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        $regex = "/^([-a-zA-Z0-9@:%._\/+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)$/";
         return (preg_match($regex, $url));
     }
 
@@ -166,7 +172,7 @@ class IndexController extends AbstractController
     public function getRandomSlug($length = null)
     {
         if (!$length) {
-            $length = getenv("MIN_SLUG_LENGTH");
+            $length = getenv("RANDOM_SLUG_LENGTH");
         }
         $seed = str_split('abcdefghijklmnopqrstuvwxyz'
             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -240,7 +246,7 @@ class IndexController extends AbstractController
 
         $url = $request->query->get("url");
 
-        $regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
+        $regex = "/^([-a-zA-Z0-9@:%._\/+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)$/";
         if (!preg_match($regex, $url)) {
             $success = false;
             $errors[] = "Not a valid URL.";
