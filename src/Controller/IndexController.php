@@ -37,21 +37,18 @@ class IndexController extends AbstractController
             return $this->redirect("/");
         }
 
-        $full_url = $request->request->get("form")["full_url"];
+        $url = $request->request->get("form")["url"];
         $custom_slug = $request->request->get("form")["slug"];
 
         $new_link = new Link();
 
         // set domain and path
-        if (!$this->matchesDomainRegex($full_url)) {
+        if (!$this->matchesDomainRegex($url)) {
             return $this->redirect("/err=2");
         }
-        list($domain, $path) = $this->getDomainAndPath($full_url);
-        $new_link->setDomain($domain);
-        $new_link->setPath($path);
 
-        // set full_url
-        $new_link->setFullUrl($domain . $path);
+        // set url
+        $new_link->setUrl($url);
 
         // set slug
         if ($custom_slug) {
@@ -72,13 +69,13 @@ class IndexController extends AbstractController
             // first, check if this exists in database
             /** @var \App\Repository\LinkRepository $link_repo */
             $link_repo = $this->getDoctrine()->getRepository(Link::class);
-            /** @var \App\Entity\Link[] $link */
-            $link = $link_repo->findBy(array("domain" => $domain, "path" => $path));
+            /** @var \App\Entity\Link $link */
+            $link = $link_repo->findOneBy(array("url" => $url));
 
             // output pre-existing entry if match
             if ($link) {
                 return $this->render('output.html.twig', array(
-                    'link' => $link[0],
+                    'output_link' => getenv("HTTP_HOST") . "/" . $link->getSlug(),
                 ));
             }
 
@@ -90,7 +87,7 @@ class IndexController extends AbstractController
             $new_link->setSlug($random_slug);
         }
 
-        $new_link->generateLink(getenv("HTTP_HOST"));
+        $output_link = getenv("HTTP_HOST") . "/" . $new_link->getSlug();
 
         // save it to database
         $em = $this->getDoctrine()->getManager();
@@ -99,7 +96,7 @@ class IndexController extends AbstractController
 
         // output
         return $this->render('output.html.twig', array(
-            'link' => $new_link,
+            'output_link' => $output_link,
         ));
     }
 
@@ -139,7 +136,7 @@ class IndexController extends AbstractController
         }
 
         // Handle redirect. This is what it's all for.
-        return new RedirectResponse("http://" . $link->getFullUrl(), getenv("REDIRECT_RESPONSE"));
+        return new RedirectResponse("http://" . $link->getUrl(), getenv("REDIRECT_RESPONSE"));
     }
 
     public function matchesDomainRegex($url)
@@ -180,24 +177,6 @@ class IndexController extends AbstractController
             $rand .= $seed[$k];
         }
         return $rand;
-    }
-
-    /**
-     * @param string $full_url
-     * @return array
-     */
-    public function getDomainAndPath($full_url)
-    {
-        $full_regex = "/^([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b)([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/";
-        preg_match($full_regex, $full_url,$full_matches);
-        $domain_regex = "/(https?:\/\/)?(www\.)?(.*)/";
-        preg_match($domain_regex, $full_matches[1], $domain_matches);
-        $domain = $domain_matches[3];
-        $path = $full_matches[2];
-        if ($path == "") {
-            $path = null;
-        }
-        return array($domain, $path);
     }
 
     /**
@@ -285,7 +264,7 @@ class IndexController extends AbstractController
                 "id" => "link_form",
             )))
             ->setAction($this->generateUrl('newLink'))
-            ->add("full_url", TextType::class, array(
+            ->add("url", TextType::class, array(
                 "label" => false,
                 "required" => true,
                 "attr" => array(

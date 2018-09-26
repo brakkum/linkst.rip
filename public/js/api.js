@@ -1,5 +1,5 @@
 
-$("#form_full_url").on("input paste", function() {
+$("#form_url").on("input paste", function() {
     let url = $(this).val();
     doDelayedUrlSearch(url);
 });
@@ -32,7 +32,7 @@ function doDelayedSlugSearch(slug) {
 }
 
 fetchUrlInfo = url => {
-    let url_input = document.getElementById("form_full_url");
+    let url_input = document.getElementById("form_url");
     let error_div = document.getElementById("errors");
 
     if (url) {
@@ -104,7 +104,7 @@ fetchSlugInfo = slug => {
 };
 
 validateBoth = () => {
-    let url = document.getElementById("form_full_url");
+    let url = document.getElementById("form_url");
     let slug = document.getElementById("form_slug");
     let url_val = url.value;
     let slug_val = slug.value;
@@ -114,7 +114,7 @@ validateBoth = () => {
 };
 
 updateSaveButton = () => {
-    let url = document.getElementById("form_full_url");
+    let url = document.getElementById("form_url");
     let slug = document.getElementById("form_slug");
     let button = document.getElementById("form_save");
 

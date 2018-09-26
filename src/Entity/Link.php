@@ -17,16 +17,6 @@ class Link
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $domain;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $path;
-
-    /**
      * @ORM\Column(type="string", length=100)
      */
     private $slug;
@@ -34,40 +24,11 @@ class Link
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $full_url;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $link;
+    private $url;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDomain(): ?string
-    {
-        return $this->domain;
-    }
-
-    public function setDomain(string $domain): self
-    {
-        $this->domain = $domain;
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(?string $path): self
-    {
-        $this->path = $path;
-
-        return $this;
     }
 
     public function getSlug(): ?string
@@ -82,33 +43,14 @@ class Link
         return $this;
     }
 
-    public function getFullUrl(): ?string
+    public function getUrl(): ?string
     {
-        return $this->full_url;
+        return $this->url;
     }
 
-    public function setFullUrl(string $full_url): self
+    public function setUrl(string $url): self
     {
-        $this->full_url = $full_url;
-
-        return $this;
-    }
-
-    public function getLink(): ?string
-    {
-        return $this->link;
-    }
-
-    public function setLink(string $link): self
-    {
-        $this->link = $link;
-
-        return $this;
-    }
-
-    public function generateLink($host)
-    {
-        $this->link = $host . "/" . $this->getSlug();
+        $this->url = $url;
 
         return $this;
     }
