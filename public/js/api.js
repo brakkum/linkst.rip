@@ -10,6 +10,7 @@ $("#form_slug").on("input paste", function() {
 });
 
 let urlTimeout = null;
+const TIMEOUT_LENGTH = 500;
 
 function doDelayedUrlSearch(url) {
     if (urlTimeout) {
@@ -17,7 +18,7 @@ function doDelayedUrlSearch(url) {
     }
     urlTimeout = setTimeout(function() {
         fetchUrlInfo(url);
-    }, 500);
+    }, TIMEOUT_LENGTH);
 }
 
 let slugTimeout = null;
@@ -28,7 +29,7 @@ function doDelayedSlugSearch(slug) {
     }
     slugTimeout = setTimeout(function() {
         fetchSlugInfo(slug);
-    }, 500);
+    }, TIMEOUT_LENGTH);
 }
 
 fetchUrlInfo = url => {
