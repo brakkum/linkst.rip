@@ -19,7 +19,6 @@ class IndexController extends AbstractController
      */
     public function index()
     {
-
         $form = $this->getIndexForm();
 
         return $this->render('index.html.twig', [
@@ -56,7 +55,7 @@ class IndexController extends AbstractController
 
         // set slug
         if ($custom_slug) {
-            if (strlen($custom_slug) < 5) {
+            if (strlen($custom_slug) < getenv("MIN_SLUG_LENGTH")) {
                 return $this->redirect("/err=1");
             }
             // is custom slug unique?
@@ -64,7 +63,6 @@ class IndexController extends AbstractController
                 return $this->redirect("/err=0");
             } else {
                 $new_link->setSlug($custom_slug);
-                $slug = $custom_slug;
             }
         } else {
             if ($custom_slug === "") {
@@ -90,7 +88,6 @@ class IndexController extends AbstractController
                 $random_slug = $this->getRandomSlug();
             }
             $new_link->setSlug($random_slug);
-            $slug = $random_slug;
         }
 
         $new_link->generateLink($request->getHttpHost());
@@ -169,8 +166,11 @@ class IndexController extends AbstractController
      * @param int $length
      * @return string
      */
-    public function getRandomSlug($length = 5)
+    public function getRandomSlug($length = null)
     {
+        if (!$length) {
+            $length = getenv("MIN_SLUG_LENGTH");
+        }
         $seed = str_split('abcdefghijklmnopqrstuvwxyz'
             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             .'0123456789_-~');
@@ -211,9 +211,10 @@ class IndexController extends AbstractController
         $errors = [];
 
         // check slug length
-        if (strlen($slug) < 5) {
+        if (strlen($slug) < getenv("MIN_SLUG_LENGTH")) {
             $success = false;
-            $errors[] = "Slug must be at least 5 characters.";
+            $min_slug = getenv("MIN_SLUG_LENGTH");
+            $errors[] = "Slug must be at least $min_slug characters.";
         }
 
         // regex to match potential slug
