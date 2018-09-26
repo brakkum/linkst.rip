@@ -21,9 +21,9 @@ class IndexController extends AbstractController
     {
         $form = $this->getIndexForm();
 
-        return $this->render('index.html.twig', [
+        return $this->render('index.html.twig', array(
             "form" => $form->createView(),
-        ]);
+        ));
     }
 
     /**
@@ -77,9 +77,9 @@ class IndexController extends AbstractController
 
             // output pre-existing entry if match
             if ($link) {
-                return $this->render('output.html.twig', [
+                return $this->render('output.html.twig', array(
                     'link' => $link[0],
-                ]);
+                ));
             }
 
             // generate random slug
@@ -98,9 +98,9 @@ class IndexController extends AbstractController
         $em->flush();
 
         // output
-        return $this->render('output.html.twig', [
+        return $this->render('output.html.twig', array(
             'link' => $new_link,
-        ]);
+        ));
     }
 
     /**
@@ -116,9 +116,9 @@ class IndexController extends AbstractController
             2 => "Invalid URL.",
         );
 
-        return $this->render("error.html.twig", [
+        return $this->render("error.html.twig", array(
             "error" => $errors[$error_id],
-        ]);
+        ));
     }
 
     /**
