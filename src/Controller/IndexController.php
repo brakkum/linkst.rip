@@ -119,7 +119,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}", name="redirectSlug", requirements={"slug"="[a-zA-Z0-9-._~]{5,100}"})
+     * @Route("/{slug}", name="redirectSlug", requirements={"slug"="^[a-zA-Z0-9-._~]{5,100}?"})
      * @param string $slug
      * @return string
      */

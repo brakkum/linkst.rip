@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 class Redirect404ToHomepageListener
@@ -35,6 +36,12 @@ class Redirect404ToHomepageListener
     */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+        // If not a HttpNotFoundException ignore
+        if (!$event->getException() instanceof NotFoundHttpException) {
+            $this->logger->log(LogLevel::WARNING,"Something happened {$event->getRequest()}");
+            return false;
+        }
+
         $request = $event->getRequest();
         $slug = $request->getPathInfo();
 
