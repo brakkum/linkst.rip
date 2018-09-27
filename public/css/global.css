@@ -116,3 +116,17 @@ button#to-index {
     color: #5eb5e0;
     text-decoration: none;
 }
+
+.output-buttons {
+    display: flex;
+}
+
+.output-buttons .button {
+    margin: 5px;
+}
+
+@media screen and (max-height: 600px) {
+    .body {
+        margin-top: 0;
+    }
+}
