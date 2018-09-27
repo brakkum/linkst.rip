@@ -29,7 +29,7 @@ class Link
     /**
      * @ORM\Column(type="integer", options={"default": 0})
      */
-    private $visits;
+    private $visits = 0;
 
     public function getId(): ?int
     {
