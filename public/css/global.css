@@ -127,6 +127,6 @@ button#to-index {
 
 @media screen and (max-height: 600px) {
     .body {
-        margin-top: 0;
+        margin-top: 40px;
     }
 }
