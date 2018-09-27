@@ -26,6 +26,11 @@ class Link
      */
     private $url;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $visits;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,25 @@ class Link
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getVisits(): ?int
+    {
+        return $this->visits;
+    }
+
+    public function setVisits(int $visits): self
+    {
+        $this->visits = $visits;
+
+        return $this;
+    }
+
+    public function addOneVisit(): self
+    {
+        $this->visits += 1;
 
         return $this;
     }

@@ -141,6 +141,12 @@ class IndexController extends AbstractController
             $url = "http://" . $url;
         }
 
+        $link->addOneVisit();
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($link);
+        $em->flush();
+
         // Handle redirect. This is what it's all for.
         return new RedirectResponse($url, getenv("REDIRECT_RESPONSE"));
     }
