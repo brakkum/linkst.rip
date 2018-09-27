@@ -86,7 +86,6 @@ class IndexController extends AbstractController
             }
             $new_link->setSlug($random_slug);
         }
-        $new_link->setVisits(0);
 
         $output_link = getenv("HTTP_HOST") . "/" . $new_link->getSlug();
 
