@@ -86,6 +86,7 @@ class IndexController extends AbstractController
             }
             $new_link->setSlug($random_slug);
         }
+        $new_link->setVisits(0);
 
         $output_link = getenv("HTTP_HOST") . "/" . $new_link->getSlug();
 
@@ -119,7 +120,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/{slug}", name="redirectSlug", requirements={"slug"="[a-zA-Z0-9-._~]{5,100}"})
+     * @Route("/{slug}", name="redirectSlug", requirements={"slug"="^[a-zA-Z0-9-._~]{5,100}?"})
      * @param string $slug
      * @return string
      */
