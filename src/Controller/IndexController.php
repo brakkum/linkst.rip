@@ -291,7 +291,7 @@ class IndexController extends AbstractController
                 "attr" => array(
                     "class" => "data-valid",
                     "maxlength" => "100",
-                    "placeholder" => "Custom Slug (optional)",
+                    "placeholder" => "Custom Message ( linkst.rip/YourMessageHere )",
                 ),
             ))
             ->add("save", SubmitType::class, array(
