@@ -108,8 +108,8 @@ class IndexController extends AbstractController
     public function errorDisplay($error_id)
     {
         $errors = array(
-            0 => "Hmm.. Looks like that slug is already taken.",
-            1 => "That slug is too short.",
+            0 => "Hmm.. Looks like that message is already taken.",
+            1 => "That message is too short.",
             2 => "Invalid URL.",
         );
 
@@ -205,7 +205,7 @@ class IndexController extends AbstractController
         if (strlen($slug) < getenv("MIN_SLUG_LENGTH")) {
             $success = false;
             $min_slug = getenv("MIN_SLUG_LENGTH");
-            $errors[] = "Slug must be at least $min_slug characters.";
+            $errors[] = "Message must be at least $min_slug characters.";
         }
 
         // regex to match potential slug
@@ -223,7 +223,7 @@ class IndexController extends AbstractController
 
             // if slug already exists
             if (count($link) > 0) {
-                $errors[] = "Slug already in use.";
+                $errors[] = "Message already in use.";
             }
         // otherwise, make it so slugAvailable fails
         } else {
