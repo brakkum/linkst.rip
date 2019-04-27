@@ -13,7 +13,7 @@ class ApiController extends AbstractController
 {
 
     /**
-     * @Route("/link", name="newLink")
+     * @Route("/api/newLink", name="newLink")
      * @param Request $request
      * @return string
      */
@@ -30,7 +30,7 @@ class ApiController extends AbstractController
                 "success" => false,
                 "error" => "Slug must be at least $min_slug_len characters long"
             ]);
-        } else {
+        } else if (empty($slug)) {
             $slug = null;
         }
 
