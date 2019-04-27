@@ -31,6 +31,11 @@ class Link
      */
     private $visits = 0;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isCustomSlug;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +80,18 @@ class Link
     public function addOneVisit(): self
     {
         $this->visits += 1;
+
+        return $this;
+    }
+
+    public function getIsCustomSlug(): ?bool
+    {
+        return $this->isCustomSlug;
+    }
+
+    public function setIsCustomSlug(bool $isCustomSlug): self
+    {
+        $this->isCustomSlug = $isCustomSlug;
 
         return $this;
     }
