@@ -108,7 +108,7 @@ class LinkstripForm extends React.Component {
 
     render() {
         return(
-            <div className="box" style={{backgroundColor: "#f4f4f4"}}>
+            <div>
                 <div className="field">
                     <label className="label">
                         Url
@@ -136,15 +136,13 @@ class LinkstripForm extends React.Component {
                     <div className="is-pulled-left is-size-4" style={{wordWrap: "break-word", maxWidth: "80%"}}>
                         {this.state.error}
                     </div>
-                    <div className="buttons is-pulled-right">
-                        <button
-                            className={"button is-info " + (this.state.sendingRequest ? "is-loading" : "")}
-                            onClick={this.submitLink}
-                            disabled={!(this.state.slugValid && this.state.urlValid)}
-                        >
-                            Make Link
-                        </button>
-                    </div>
+                    <button
+                        className={"button is-info is-pulled-right " + (this.state.sendingRequest ? "is-loading" : "")}
+                        onClick={this.submitLink}
+                        disabled={!(this.state.slugValid && this.state.urlValid)}
+                    >
+                        Make Link
+                    </button>
                 </div>
             </div>
         )

@@ -1,12 +1,14 @@
 import React from 'react';
 import 'bulma/css/bulma.css';
 import LinkstripForm from "./LinkstripForm";
+import ApiInfo from "./ApiInfo";
 
 class App extends React.Component {
 
     state = {
         link: "",
-        linkCopied: false
+        linkCopied: false,
+        showApiInfo: false
     };
 
     copyLink = () => {
@@ -27,6 +29,7 @@ class App extends React.Component {
 
     render() {
         const link = this.state.link;
+        const showApiInfo = this.state.showApiInfo;
         return (
             <div style={{backgroundColor: "transparent"}}>
                 <nav className="navbar" style={{maxWidth: "900px", margin: "auto", backgroundColor: "transparent"}}>
@@ -38,7 +41,7 @@ class App extends React.Component {
                                     () => window.open("https://github.com/brakkum/linkst.rip")
                                 }
                             >
-                                Linkst.rip
+                                linkst.rip
                             </a>
                         </div>
                     </div>
@@ -52,19 +55,38 @@ class App extends React.Component {
                     style={{height: "10vh"}}
                 />
                 <div
-                    className="is-hidden-mobile"
-                    style={{height: "15vh"}}
-                />
-                <div
                     className="hero is-fullheight-with-navbar"
                 >
                     <div>
                         <div style={{width: "90%", maxWidth: "800px", margin: "auto"}}>
-                            <LinkstripForm
-                                setLink={this.setLink}
-                            />
+                            <div className="box" style={{backgroundColor: "#f4f4f4"}}>
+                                <div className="tabs">
+                                    <ul>
+                                        <li
+                                            className={showApiInfo ? "" : "is-active"}
+                                            onClick={() => this.setState({showApiInfo: false})}
+                                        >
+                                            <a>Make a Link</a>
+                                        </li>
+                                        <li
+                                            className={showApiInfo ? "is-active" : ""}
+                                            onClick={() => this.setState({showApiInfo: true})}
+                                        >
+                                            <a>Use the API</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {showApiInfo ?
+                                    <ApiInfo />
+                                    :
+                                    <LinkstripForm
+                                        setLink={this.setLink}
+                                    />
+                                }
+                            </div>
                         </div>
                     </div>
+                    {showApiInfo && <div style={{height: "300px"}} />}
                 </div>
                 {link !== "" &&
                     <div className="modal is-active">
