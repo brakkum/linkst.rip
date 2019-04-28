@@ -12,8 +12,23 @@
         <link href="{{ asset("favicon.ico") }}" rel="icon" />
         <link href="{{ asset("build/index.css") }}" rel="stylesheet" />
     </head>
-    <body style="background: linear-gradient(103deg, #fcefe7, #cfd6d3)">
+    <body>
         <div id="app-root"></div>
+        <script>
+            const body = document.getElementsByTagName("body")[0];
+
+            randHex = (min = 0, max = 255) => {
+                return "#000000".replace(/00/g, () => {
+                    return (~~(Math.random() * (max - min) + min)).toString(16);
+                });
+            };
+
+            const lighterShade = randHex(215, 255);
+            const darkerShade = randHex(100, 175);
+            const randDegrees = Math.random() * (360 - 220) + 220;
+
+            body.style.background = `linear-gradient(${randDegrees}deg, ${darkerShade}, ${lighterShade})`;
+        </script>
         <script src="{{ asset("build/index.js") }}"></script>
     </body>
 </html>
