@@ -3,7 +3,6 @@ import React from "react";
 class LinkstripForm extends React.Component {
 
     _timeoutLength = 500;
-    _host = "";
 
     state = {
         url: "",
@@ -27,7 +26,7 @@ class LinkstripForm extends React.Component {
         this.setState({
             url: url,
             urlTimeout: setTimeout(() => {
-                fetch(`${this._host}/api/checkUrl?url=${url}`)
+                fetch(`/api/checkUrl?url=${url}`)
                     .then(res => res.json())
                     .then(json => {
                         if (json.success) {
@@ -92,7 +91,7 @@ class LinkstripForm extends React.Component {
         let url = this.state.url;
         let slug = this.state.slug;
 
-        fetch(`${this._host}/api/newLink?url=${url}&slug=${slug}`)
+        fetch(`/api/newLink?url=${url}&slug=${slug}`)
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
