@@ -64,7 +64,7 @@ class LinkstripForm extends React.Component {
         this.setState({
             slug: slug,
             slugTimeout: setTimeout(() => {
-                fetch(`${this._host}/api/checkSlug?slug=${slug}`)
+                fetch(`/api/checkSlug?slug=${slug}`)
                     .then(res => res.json())
                     .then(json => {
                         if (json.success) {
