@@ -9,29 +9,11 @@
         <meta name="author" content="Daniel Brakke">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}linkst.rip URL shortening{% endblock %}</title>
-        <link href="images/favicon.ico" rel="icon" >
-        <link href="css/global.css" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
-        <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous">
-        </script>
+        <link href="{{ asset("favicon.ico") }}" rel="icon" />
+        <link href="{{ asset("build/index.css") }}" rel="stylesheet" />
     </head>
-    <header>
-        {% include "header.html.twig" %}
-        {% block header %}
-        {% endblock %}
-    </header>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    <script>
-        fetch(`/api/validUrl?url=${"testing.com"}`)
-            .then(res => res.json())
-            .then(json => {
-                console.log(json)
-            }).catch(e => console.log(e))
-    </script>
+    <body style="background: linear-gradient(103deg, #fcefe7, #cfd6d3)">
+        <div id="app-root"></div>
+        <script src="{{ asset("build/index.js") }}"></script>
     </body>
 </html>

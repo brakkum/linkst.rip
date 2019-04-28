@@ -13,7 +13,7 @@ class ApiController extends AbstractController
 {
 
     /**
-     * @Route("/api/newLink", name="newLink")
+     * @Route("/api/newLink", name="newLink", methods={"GET"})
      * @param Request $request
      * @return string
      */
@@ -61,18 +61,15 @@ class ApiController extends AbstractController
 
         // check for reusable link
         $link_repo = $this->getDoctrine()->getRepository(Link::class);
-        $old_link = $link_repo->findOneBy(array("url" => $url));
+        $old_link = $link_repo->findOneBy(array("url" => $url, "isCustomSlug" => false));
 
         // if there's no custom slug
         // and the link already exists
         if (!$slug && $old_link) {
-            // if old link is random slug, reuse
-            if (!$old_link->getIsCustomSlug()) {
-                return new JsonResponse([
-                    "success" => true,
-                    "url" => getenv("HTTP_HOST") . "/" . $old_link->getSlug()
-                ]);
-            }
+            return new JsonResponse([
+                "success" => true,
+                "url" => getenv("HTTP_HOST") . "/" . $old_link->getSlug()
+            ]);
         }
 
         if ($new_link->getIsCustomSlug()) {
@@ -170,14 +167,13 @@ class ApiController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function checkSlugAvailability(Request $request)
+    public function checkIfSlugAvailable(Request $request)
     {
         $slug = $request->get("slug");
 
         if (empty($slug)) {
             return new JsonResponse([
-                "success" => false,
-                "error" => "Cannot be empty"
+                "success" => true
             ]);
         }
 
@@ -215,7 +211,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/validUrl", name="checkUrl", methods={"GET"})
+     * @Route("/api/checkUrl", name="checkUrl", methods={"GET"})
      * @param Request $request
      * @return JsonResponse
      */

@@ -22,7 +22,7 @@ class Link
     private $slug;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=4000)
      */
     private $url;
 
