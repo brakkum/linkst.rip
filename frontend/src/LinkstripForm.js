@@ -108,7 +108,7 @@ class LinkstripForm extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="box has-background-white-bis">
                 <div className="field">
                     <label className="label">
                         Url

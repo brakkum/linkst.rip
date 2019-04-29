@@ -31,7 +31,7 @@ class App extends React.Component {
         const link = this.state.link;
         const showApiInfo = this.state.showApiInfo;
         return (
-            <div style={{backgroundColor: "transparent"}}>
+            <div>
                 <nav className="navbar" style={{maxWidth: "900px", margin: "auto", backgroundColor: "transparent"}}>
                     <div className="navbar-brand">
                         <div className="navbar-item">
@@ -51,11 +51,10 @@ class App extends React.Component {
                         </div>
                     </div>
                 </nav>
-                <div
-                    style={{height: "10vh"}}
-                />
-                <div
-                    className="hero is-fullheight-with-navbar"
+                <div style={{height: "10vh"}} />
+                <section
+                    className=""
+                    style={{height: "100%", overflow: "auto"}}
                 >
                     <div>
                         <div style={{width: "90%", maxWidth: "800px", margin: "auto"}}>
@@ -86,47 +85,47 @@ class App extends React.Component {
                             </div>
                         </div>
                     </div>
-                    {showApiInfo && <div style={{height: "300px"}} />}
-                </div>
+                </section>
+                {showApiInfo && <div style={{height: "300px"}} />}
                 {link !== "" &&
-                    <div className="modal is-active">
-                        <div className="modal-background"
-                            onClick={() => this.setState({link: ""})}
-                        >
+                <div className="modal is-active">
+                    <div className="modal-background"
+                         onClick={() => this.setState({link: ""})}
+                    >
+                    </div>
+                    <div className="modal-card" style={{width: "90%", maxWidth: "600px"}}>
+                        <div className="modal-card-head">
+                            New Link
                         </div>
-                        <div className="modal-card" style={{width: "90%"}}>
-                            <div className="modal-card-head">
-                                New Link
+                        <div className="modal-card-body">
+                            <div className="field">
+                                <input
+                                    className={"input " + (this.state.linkCopied && "is-success")}
+                                    defaultValue={link}
+                                    ref={input => this.linkInput = input}
+                                />
                             </div>
-                            <div className="modal-card-body">
-                                <div className="field">
-                                    <input
-                                        className={"input " + (this.state.linkCopied && "is-success")}
-                                        defaultValue={link}
-                                        ref={input => this.linkInput = input}
-                                    />
-                                </div>
-                                <div>
-                                    {document.queryCommandSupported('copy') &&
-                                        <button
-                                            className="button is-success is-pulled-right"
-                                            onClick={this.copyLink}
-                                        >
-                                            Copy Link
-                                        </button>
-                                    }
-                                </div>
-                            </div>
-                            <div className="modal-card-foot">
+                            <div>
+                                {document.queryCommandSupported('copy') &&
                                 <button
-                                    className="button is-info is-pulled-right"
-                                    onClick={() => this.setState({link: ""})}
+                                    className="button is-success is-pulled-right"
+                                    onClick={this.copyLink}
                                 >
-                                    Close
+                                    Copy Link
                                 </button>
+                                }
                             </div>
+                        </div>
+                        <div className="modal-card-foot">
+                            <button
+                                className="button is-info is-pulled-right"
+                                onClick={() => this.setState({link: ""})}
+                            >
+                                Close
+                            </button>
                         </div>
                     </div>
+                </div>
                 }
             </div>
         );
