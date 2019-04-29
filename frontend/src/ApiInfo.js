@@ -49,6 +49,9 @@ export default class ApiInfo extends React.Component {
                     <p>
                         If the link creation was not successful, there will be an 'error' key in the JSON with an explanation.
                     </p>
+                    <p>
+                        If the link was created successfully, the JSON will contain a 'url' key with the linkst.rip link.
+                    </p>
                 </div>
             </div>
         )
