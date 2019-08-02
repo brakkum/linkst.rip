@@ -16,11 +16,24 @@
         <title>linkst.rip - nobody likes an ugly url</title>
         <link href="{{ asset("favicon.ico") }}" rel="icon" />
         <link href="{{ asset("build/index.css") }}" rel="stylesheet" />
+        <style>
+            #app-background {
+                opacity: .5;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+
+            #app-root {
+                position: relative;
+            }
+        </style>
     </head>
     <body>
+        <div id="app-background">s</div>
         <div id="app-root"></div>
         <script>
-            const body = document.getElementsByTagName("body")[0];
+            const background = document.getElementById("app-background");
 
             randHex = (min = 0, max = 255) => {
                 return "#000000".replace(/00/g, () => {
@@ -32,7 +45,7 @@
             const darkerShade = randHex(100, 175);
             const randDegrees = Math.random() * (360 - 220) + 220;
 
-            body.style.background = `linear-gradient(${randDegrees}deg, ${darkerShade}, ${lighterShade})`;
+            background.style.background = `linear-gradient(${randDegrees}deg, ${darkerShade}, ${lighterShade})`;
         </script>
         <script src="{{ asset("build/index.js") }}"></script>
     </body>

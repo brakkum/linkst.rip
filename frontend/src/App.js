@@ -57,7 +57,7 @@ class App extends React.Component {
                     style={{height: "100%", overflow: "auto"}}
                 >
                     <div>
-                        <div style={{width: "90%", maxWidth: "800px", margin: "auto"}}>
+                        <div style={{width: "90%", maxWidth: "800px", margin: "10px auto"}}>
                             <div className="box" style={{backgroundColor: "#f4f4f4"}}>
                                 <div className="tabs">
                                     <ul>
