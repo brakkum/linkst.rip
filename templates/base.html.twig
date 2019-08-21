@@ -32,21 +32,6 @@
     <body>
         <div id="app-background"></div>
         <div id="app-root"></div>
-        <script>
-            const background = document.getElementById("app-background");
-
-            const randHex = (min = 0, max = 255) => {
-                return "#000000".replace(/00/g, () => {
-                    return (~~(Math.random() * (max - min) + min)).toString(16);
-                });
-            };
-
-            const lighterShade = randHex(215, 255);
-            const darkerShade = randHex(100, 175);
-            const randDegrees = Math.random() * (360 - 220) + 220;
-
-            background.style.background = `linear-gradient(${randDegrees}deg, ${darkerShade}, ${lighterShade})`;
-        </script>
         <script src="{{ asset("build/index.js") }}"></script>
     </body>
 </html>

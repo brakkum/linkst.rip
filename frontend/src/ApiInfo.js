@@ -18,9 +18,7 @@ export default class ApiInfo extends React.Component {
                     <h4 className="is-size-4 title">Check if you have a valid URL</h4>
                     <p>
                         Send a URL in a GET request to the checkUrl endpoint like this:
-                        <div>
                             <code className="is-code">https://linkst.rip/api/checkUrl?<span className="is-code-highlight">url=http://some.url/</span></code>
-                        </div>
                         A JSON response will be returned with a 'success' key. If it is false, an 'error' key will be included with a message, detailing why.
                     </p>
                 </div>
@@ -28,9 +26,7 @@ export default class ApiInfo extends React.Component {
                     <h4 className="is-size-4 title">Check if your slug is valid/available</h4>
                     <p>
                         Send a slug in a GET request to the checkSlug endpoint like this:
-                        <div>
                             <code className="is-code">https://linkst.rip/api/checkSlug?<span className="is-code-highlight">slug=testSlug</span></code>
-                        </div>
                         A JSON response will be returned with a 'success' key. It will only be true if the provided slug is both valid and available. If not, an 'error' key will be available
                     </p>
                     <p>
@@ -41,9 +37,7 @@ export default class ApiInfo extends React.Component {
                     <h4 className="is-size-4 title">Create new linkst.rip URL</h4>
                     <p>
                         Send a URL and optional slug in a GET request to the newLink endpoint like this:
-                        <div>
                             <code className="is-code">https://linkst.rip/api/newLink?<span className="is-code-highlight">url=http://some.url/</span>&<span className="is-code-highlight">slug=testSlug</span></code>
-                        </div>
                         If no slug value is given, a random string will be used for link creation.
                     </p>
                     <p>

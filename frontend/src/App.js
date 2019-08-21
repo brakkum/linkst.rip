@@ -8,7 +8,8 @@ class App extends React.Component {
     state = {
         link: "",
         linkCopied: false,
-        showApiInfo: false
+        showApiInfo: false,
+        background: ""
     };
 
     copyLink = () => {
@@ -27,19 +28,38 @@ class App extends React.Component {
         });
     };
 
+    getAppBackground = () => {
+        const randHex = (min = 0, max = 255) => {
+            return "#000000".replace(/00/g, () => {
+                return (~~(Math.random() * (max - min) + min)).toString(16);
+            });
+        };
+
+        const lighterShade = randHex(215, 255);
+        const darkerShade = randHex(100, 175);
+        const randDegrees = Math.random() * (360 - 220) + 220;
+
+        return `linear-gradient(${randDegrees}deg, ${darkerShade}, ${lighterShade})`;
+    };
+
+    componentDidMount = () => {
+        this.setState({background: this.getAppBackground()});
+    };
+
     render() {
         const link = this.state.link;
         const showApiInfo = this.state.showApiInfo;
         return (
             <div>
+                <div id="app-background" style={{background: this.state.background}}></div>
                 <nav className="navbar" style={{maxWidth: "900px", margin: "auto", backgroundColor: "transparent"}}>
                     <div className="navbar-brand">
                         <div className="navbar-item">
                             <a
                                 className="is-size-2 is-link"
-                                onClick={
-                                    () => window.open("https://github.com/brakkum/linkst.rip")
-                                }
+                                href="https://github.com/brakkum/linkst.rip"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
                                 linkst.rip
                             </a>
@@ -52,10 +72,7 @@ class App extends React.Component {
                     </div>
                 </nav>
                 <div style={{height: "10vh"}} />
-                <section
-                    className=""
-                    style={{height: "100%", overflow: "auto"}}
-                >
+                <section>
                     <div>
                         <div style={{width: "90%", maxWidth: "800px", margin: "10px auto"}}>
                             <div className="box" style={{backgroundColor: "#f4f4f4"}}>
@@ -65,13 +82,14 @@ class App extends React.Component {
                                             className={showApiInfo ? "" : "is-active"}
                                             onClick={() => this.setState({showApiInfo: false})}
                                         >
-                                            <a>Make a Link</a>
+                                            <a href="#link">Make a Link</a>
                                         </li>
                                         <li
                                             className={showApiInfo ? "is-active" : ""}
                                             onClick={() => this.setState({showApiInfo: true})}
+                                            href="#api"
                                         >
-                                            <a>Use the API</a>
+                                            <a href="#api">Use the API</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -86,7 +104,7 @@ class App extends React.Component {
                         </div>
                     </div>
                 </section>
-                {showApiInfo && <div style={{height: "300px"}} />}
+                {showApiInfo && <div style={{height: "150px"}} />}
                 {link !== "" &&
                 <div className="modal is-active">
                     <div className="modal-background"
