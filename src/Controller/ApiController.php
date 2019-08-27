@@ -22,16 +22,27 @@ class ApiController extends AbstractController
         $url = $request->get("url");
         $slug = $request->get("slug");
         $min_slug_len = getenv("MIN_SLUG_LENGTH");
+        $max_slug_len = getend("MAX_SLUG_LENGTH");
 
         // if the slug isn't empty, but doesn't
-        // meet requirement, then fail
-        if (!empty($slug) && strlen($slug) < $min_slug_len) {
+        // meet requirements, then fail
+        if (empty($slug)) {
+            $slug = null;
+        } else if (strlen($slug) < $min_slug_len) {
             return new JsonResponse([
                 "success" => false,
                 "error" => "Slug must be at least $min_slug_len characters long"
             ]);
-        } else if (empty($slug)) {
-            $slug = null;
+        } else if (strlen($slug) > $max_slug_len) {
+            return new JsonResponse([
+                "success" => false,
+                "error" => "Slug must be shorter than $max_slug_len characters"
+            ]);
+        } else if (!preg_match("/^[a-zA-Z0-9-_~]*$/", $slug)) {
+            return new JsonResponse([
+                "success" => false,
+                "error" => "Slug can only contain a-z, 0-9, -_~"
+            ]);
         }
 
         // double check that the url is 'valid'
@@ -178,19 +189,26 @@ class ApiController extends AbstractController
         }
 
         $min_slug_len = getenv("MIN_SLUG_LENGTH");
+        $max_slug_len = getenv("MAX_SLUG_LENGTH");
 
         if (strlen($slug) < $min_slug_len) {
             return new JsonResponse([
                 "success" => false,
-                "error" => "Message must be at least $min_slug_len characters."
+                "error" => "Slug must be at least $min_slug_len characters"
             ]);
         }
 
-
-        if (!preg_match("/^[a-zA-Z0-9-_~]{{$min_slug_len},100}$/", $slug)) {
+        if (strlen($slug) > $max_slug_len) {
             return new JsonResponse([
                 "success" => false,
-                "error" => "Can only contain a-z, 0-9, -_~."
+                "error" => "Slug must be shorter than $max_slug_len characters"
+            ]);
+        }
+
+        if (!preg_match("/^[a-zA-Z0-9-_~]*$/", $slug)) {
+            return new JsonResponse([
+                "success" => false,
+                "error" => "Slug can only contain a-z, 0-9, -_~"
             ]);
         }
 
