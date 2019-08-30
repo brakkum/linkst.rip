@@ -9,7 +9,7 @@ class App extends React.Component {
     state = {
         link: "",
         linkCopied: false,
-        openTab: "npm", // "link" | "api" | "npm"
+        openTab: "link", // "link" | "api" | "npm"
         background: ""
     };
 

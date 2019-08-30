@@ -1,4 +1,3 @@
-import { vs } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import ExampleCode from "./ExampleCode";
 import React from "react";
@@ -8,7 +7,9 @@ export default function NpmInfo() {
     return (
         <div className="box">
             <div className="title">
-                Linkstrip
+                <a href="https://www.npmjs.com/package/linkstrip">
+                    Linkstrip
+                </a>
             </div>
             <div className="subtitle">
                 A small library for generating shorter links
@@ -23,7 +24,7 @@ export default function NpmInfo() {
             <div className="is-size-4">
                 Usage
             </div>
-            <SyntaxHighlighter language="javascript" style={vs}>
+            <SyntaxHighlighter language="javascript">
                 {ExampleCode}
             </SyntaxHighlighter>
             <div>
