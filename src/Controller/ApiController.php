@@ -135,7 +135,7 @@ class ApiController extends AbstractController
         $em->flush();
 
         // Handle redirect. This is what it's all for.
-        return new RedirectResponse($url, getenv("REDIRECT_RESPONSE"));
+        return new RedirectResponse($url, intval(getenv("REDIRECT_RESPONSE")));
     }
 
     /**
