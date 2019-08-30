@@ -22,7 +22,7 @@ class ApiController extends AbstractController
         $url = $request->get("url");
         $slug = $request->get("slug");
         $min_slug_len = getenv("MIN_SLUG_LENGTH");
-        $max_slug_len = getend("MAX_SLUG_LENGTH");
+        $max_slug_len = getenv("MAX_SLUG_LENGTH");
 
         // if the slug isn't empty, but doesn't
         // meet requirements, then fail
@@ -31,17 +31,17 @@ class ApiController extends AbstractController
         } else if (strlen($slug) < $min_slug_len) {
             return new JsonResponse([
                 "success" => false,
-                "error" => "Slug must be at least $min_slug_len characters long"
+                "error" => "Slug must be at least $min_slug_len characters"
             ]);
         } else if (strlen($slug) > $max_slug_len) {
             return new JsonResponse([
                 "success" => false,
                 "error" => "Slug must be shorter than $max_slug_len characters"
             ]);
-        } else if (!preg_match("/^[a-zA-Z0-9-_~]*$/", $slug)) {
+        } else if (!preg_match("/^[a-zA-Z0-9-_.~]*$/", $slug)) {
             return new JsonResponse([
                 "success" => false,
-                "error" => "Slug can only contain a-z, 0-9, -_~"
+                "error" => "Slug can only contain a-z, 0-9, -_.~"
             ]);
         }
 
@@ -161,7 +161,7 @@ class ApiController extends AbstractController
         $seed = str_split(
             'abcdefghijklmnopqrstuvwxyz'
             .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            .'0123456789_-~'
+            .'0123456789_-.~'
         );
 
         shuffle($seed);
@@ -205,10 +205,10 @@ class ApiController extends AbstractController
             ]);
         }
 
-        if (!preg_match("/^[a-zA-Z0-9-_~]*$/", $slug)) {
+        if (!preg_match("/^[a-zA-Z0-9-_.~]*$/", $slug)) {
             return new JsonResponse([
                 "success" => false,
-                "error" => "Slug can only contain a-z, 0-9, -_~"
+                "error" => "Slug can only contain a-z, 0-9, -_.~"
             ]);
         }
 

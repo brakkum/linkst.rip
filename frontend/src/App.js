@@ -2,13 +2,14 @@ import React from 'react';
 import 'bulma/css/bulma.css';
 import LinkstripForm from "./LinkstripForm";
 import ApiInfo from "./ApiInfo";
+import NpmInfo from './NpmInfo';
 
 class App extends React.Component {
 
     state = {
         link: "",
         linkCopied: false,
-        showApiInfo: false,
+        openTab: "npm", // "link" | "api" | "npm"
         background: ""
     };
 
@@ -48,7 +49,7 @@ class App extends React.Component {
 
     render() {
         const link = this.state.link;
-        const showApiInfo = this.state.showApiInfo;
+        const openTab = this.state.openTab;
         return (
             <div>
                 <div id="app-background" style={{background: this.state.background}}></div>
@@ -79,32 +80,44 @@ class App extends React.Component {
                                 <div className="tabs">
                                     <ul>
                                         <li
-                                            className={showApiInfo ? "" : "is-active"}
-                                            onClick={() => this.setState({showApiInfo: false})}
+                                            className={openTab === "link" ? "is-active" : ""}
+                                            onClick={() => this.setState({openTab: "link"})}
+
                                         >
                                             <a href="#link">Make a Link</a>
                                         </li>
                                         <li
-                                            className={showApiInfo ? "is-active" : ""}
-                                            onClick={() => this.setState({showApiInfo: true})}
-                                            href="#api"
+                                            className={openTab === "api" ? "is-active" : ""}
+                                            onClick={() => this.setState({openTab: "api"})}
                                         >
                                             <a href="#api">Use the API</a>
                                         </li>
+                                        <li
+                                            className={openTab === "npm" ? "is-active" : ""}
+                                            onClick={() => this.setState({openTab: "npm"})}
+                                        >
+                                            <a href="#npm">npm</a>
+                                        </li>
                                     </ul>
                                 </div>
-                                {showApiInfo ?
-                                    <ApiInfo />
-                                    :
+                                {openTab === "link" ?
                                     <LinkstripForm
                                         setLink={this.setLink}
                                     />
+                                    :
+                                    openTab === "api" ?
+                                        <ApiInfo />
+                                    :
+                                    openTab === "npm" ?
+                                        <NpmInfo />
+                                    :
+                                    ""
                                 }
                             </div>
                         </div>
                     </div>
                 </section>
-                {showApiInfo && <div style={{height: "150px"}} />}
+                <div style={{height: "50px"}} />
                 {link !== "" &&
                 <div className="modal is-active">
                     <div className="modal-background"
