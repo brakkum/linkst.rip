@@ -124,7 +124,7 @@ class ApiController extends AbstractController
 
         $url = $link->getUrl();
 
-        if (!preg_match("/https?:\/\//", $url)) {
+        if (!preg_match("/^https?:\/\//", $url)) {
             $url = "http://" . $url;
         }
 
