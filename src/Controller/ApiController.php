@@ -251,7 +251,8 @@ class ApiController extends AbstractController
 
     public function urlMatchesDomainRegex($url)
     {
-        $regex = "/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*(\.[a-z]{2,5})?(:[0-9]{1,5})?(\/.*)?$/";
+        // https://regex101.com/r/mP6ldQ/72
+        $regex = "/((https?|ftp):\/\/)?([a-z0-9+!*(),;?&=.-]+(:[a-z0-9+!*(),;?&=.-]+)?@)?([a-z0-9\-\.]*)\.(([a-z]{2,4})|([0-9]{1,3}\.([0-9]{1,3})\.([0-9]{1,3})))(:[0-9]{2,5})?(\/([a-z0-9+%-]\.?)+)*\/?(\?[a-z+&$_.-][a-z0-9;:@&%=+\/.-]*)?(#[a-z_.-][a-z0-9+$%_.-]*)?/i";
         return (preg_match($regex, $url));
     }
 }
