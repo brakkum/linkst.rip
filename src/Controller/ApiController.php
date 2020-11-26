@@ -93,7 +93,7 @@ class ApiController extends AbstractController
             $new_link->setSlug($random_slug);
         }
 
-        $new_url = getenv("HTTP_HOST") . "/" . $new_link->getSlug();
+        $new_url = "https://" . getenv("HTTP_HOST") . "/" . $new_link->getSlug();
 
         // save it to database
         $em = $this->getDoctrine()->getManager();
